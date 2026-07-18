@@ -1,0 +1,365 @@
+<!DOCTYPE html><html class="theme-default" display="false" lang="zh-cn"><head><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="renderer" content="webkit"><title>用户登录 - 禅道</title><link rel="icon" href="/zentao/favicon.ico" type="image/x-icon" /><link rel="shortcut icon" href="/zentao/favicon.ico" type="image/x-icon" /><link id="zuiCSS" rel="stylesheet" href="/zentao/js/zui3/zui.zentao.css?v=20.8" /><link id="zuiTheme" rel="stylesheet" href="/zentao/js/zui3/themes/default.css?v=20.8" /><script id="zuiJS" src="/zentao/js/zui3/zui.zentao.js?v=20.8"></script><script>;(function(){$.setLibRoot("\/zentao\/js\/zui3\/");}());</script><script id="configJS">;(function(){window.config = {"webRoot":"\/zentao\/","debug":true,"appName":"","cookieLife":30,"requestType":"PATH_INFO","requestFix":"-","moduleVar":"m","methodVar":"f","viewVar":"t","defaultView":"html","themeRoot":"\/zentao\/theme\/","currentModule":"user","currentMethod":"login","rawModule":"user","rawMethod":"login","clientLang":"zh-cn","requiredFields":"","router":"\/zentao\/index.php","save":"保存","expand":"展开全部","runMode":"","timeout":30000,"pingInterval":"","onlybody":"no","clientCache":true,"morphUpdate":true,"account":"","zin":true};}());</script><script>;(function(){window.zin = {"config":window.config};}());</script><script src="/zentao/js/zui3/zin.js?v=20.8"></script></head><body><style class="zin-page-css" data-id="user-login">.panel.list .panel-heading {padding-left :0px;}
+.panel.list .panel-body {padding :0px;}
+body {background: var(--color-primary-500) linear-gradient(-90deg, var(--color-primary-600) 0%, var(--color-primary-500) 100%); background-color: var(--color-primary-500);}
+#main {min-height:0px;}
+#main.loading::before {display: none!important;}
+#login {max-width: 720px !important; margin: 0 auto; margin-top: 5%; padding: 0 40px;}
+#loginPanel {background: #fff; overflow: hidden; box-shadow: 0 0 20px 0 rgba(0,0,0,.1); border-radius: 3px; position: relative;}
+#main.loading #loginPanel::before {content: ' '; display: block; position: absolute; left: 0; top: 0; right: 0; bottom: 0; background-color: rgba(var(--color-canvas-rgb),.7); border-radius: inherit; z-index: 1;}
+#loginPanel .header {position: relative;}
+#loginPanel .header > h2 {font-size: 16px; margin: 0; line-height: 32px; max-width: calc(100% - 90px); display: inline-block;}
+
+#logo-box {background-size: cover; background-position: center; position: relative;}
+#login-logo, #login-ai {position: absolute; left: 50%; transform: translateX(-50%);}
+
+#loginBox {padding: 24px 40px 0 40px;}
+
+#loginPanel > .footer {background: #eee; padding: 20px; color: #838a9d;}
+#loginPanel > .footer a {display: inline-block; margin-left: 5px; color: var(--color-gray-900);}
+#loginPanel > .footer a:hover {color: var(--color-primary-500);}
+#loginPanel > .loginBody {align-items: stretch;}
+#loginPanel > .loginBody .loginExpired {margin-bottom: 8px;}
+#login #info {margin-top: 10px; color: #fff; text-align:center;}
+#login #info a {display: inline-block; margin-left: 5px;}
+.actions.btn {min-width: 0; width: 85px;}
+.langsDropMenu.dropdown-menu {min-width: 85px;}
+#langs-toggle {float: right; position: absolute; right: 0;}
+
+#loginForm {margin: 10px 0 30px 0;}
+#loginOptions {position: relative;}
+#keepLogin {display: inline-block; vertical-align: middle;}
+.resetPassword {position: absolute; top: 50%; right: var(--form-grid-gap-x-half); transform: translateY(-50%); color: var(--color-fore);}
+
+.form-actions {padding-bottom: 0 !important;}
+.form-actions > button {width: 100%;}
+
+.form-actions .btn {min-width: unset;}
+.form-actions .resetPassword {box-shadow: unset; background-color: unset; color: unset;}
+.form-actions .resetPassword:before {background-color: unset;}
+
+.captchaBox .input-group-addon {width: 110px; padding: 0px;}
+input[name="captcha"] {border-bottom-right-radius: var(--radius-none) !important; border-top-right-radius: var(--radius-none) !important;}
+
+.showNotice {color: yellow;}
+.showNotice:hover {color: yellow;}
+
+.table-row-extension .alert {margin-bottom: 0px !important;}
+.table-row-extension .content {color: #3c4353;}
+.table-row-extension .expired-tips {cursor: pointer;}
+</style><script src="/zentao/js/md5.js?v=20.8"></script><div class="no-padding" id="main"><div id="login"><div id="loginPanel"><div class="flex items-start loginBody"><div class="cell" style="flex-basis: 41.666666666667%; background-image: url(/zentao/theme/default/images/main/zt-login-bg.svg);" id="logo-box"><img style="top: 60px;" id="login-logo" src="/zentao/theme/default/images/main/zt-login-logo.svg" /><img style="bottom: 48px;" id="login-ai" src="/zentao/theme/default/images/main/zt-login-ai.svg" /></div><div class="cell" style="flex-basis: 58.333333333333%;" id="loginBox"><div class="header"><h2 class="font-bold">杭州缥缈峰项目管理系统</h2><a data-toggle="dropdown" data-trigger="hover" zui-toggle-dropdown="[]" id="langs-toggle">简体</a><menu class="menu dropdown-menu langsDropMenu" id="langs"><li class="menu-item item"><a class="active" data-on="click" data-call="switchLang" data-params="zh-cn"><span class="text">简体</span></a></li><li class="menu-item item"><a data-on="click" data-call="switchLang" data-params="zh-tw"><span class="text">繁體</span></a></li><li class="menu-item item"><a data-on="click" data-call="switchLang" data-params="en"><span class="text">English</span></a></li></menu></div><p class="text-danger loginExpired">系统登录已过期，请重新登录：）</p><form class="form load-indicator form-ajax no-morph form-grid no-required" id="loginForm" action="/zentao/user-login-L3plbnRhby9maWxlLXJlYWQtMTA2NDcyLmh0bWw=.html" method="post" zui-create zui-create-ajaxForm><div class="form-group w-full"><label class="form-label"><span class="text">用户名</span></label><input class="form-control" type="text" autocomplete="off" name="account" id="account" /></div><div class="form-group w-full"><label class="form-label"><span class="text">密码</span></label><input class="form-control" type="password" autocomplete="off" name="password" id="password" /></div><div class="form-group w-full no-label" id="loginOptions"><div class="check-list" id><div class="checkbox-primary"><input type="checkbox" id="keepLoginon" name="keepLogin" value="on" /><label for="keepLoginon">保持登录</label></div></div><a class="resetPassword" href="/zentao/user-reset.html">忘记密码</a></div><input type="hidden" name="referer" value="/zentao/file-read-106472.html" /><div class="toolbar form-actions form-group no-label"><button class="toolbar-item primary btn" id="submit" type="submit"><span class="text">登录</span></button></div></form><script>;(function(){$(function(){
+zui.create("formGrid","#loginForm",[]);;
+});}());</script></div></div></div><div id="info"><div id="poweredby"><iframe class="hidden" id="updater" src="/zentao/misc-checkUpdate-bfdac67bf94818ad77c488a85b693c15.html"></iframe></div></div></div></div><script class="zin-page-js" data-id="user-login">;(function(){zui.defineFn();
+const loginTimeoutTip = "系统登录失败，请检查代理服务是否正常";
+$(function(){
+const ele = document.getElementById("loginForm");if(!ele)return;const $ele = $(ele); const events = new Set(($ele.attr("data-zin-events") || "").split(" ").filter(Boolean));
+$ele.on('click.zin.on', function(e){
+(function(){
+const target = e.target.closest('#submit');if(!target) return;
+(safeSubmit).call(target,e);
+})();
+});events.add('click');
+$ele.attr("data-zin-events", Array.from(events).join(" "));
+});window.zinDebug = {"trace":{"request":{"start":"2026-07-18 13:29:48","url":"\/zentao\/user-login-L3plbnRhby9maWxlLXJlYWQtMTA2NDcyLmh0bWw=.html","protocol":"HTTP\/1.1","method":"GET","timeUsed":44,"memory":2323.9,"querys":17,"caches":0,"files":149,"session":"meshodae4qi7sslrbos46fhuf1"},"files":["\/opt\/zbox\/app\/zentao\/www\/index.php","\/opt\/zbox\/app\/zentao\/framework\/router.class.php","\/opt\/zbox\/app\/zentao\/framework\/base\/router.class.php","\/opt\/zbox\/app\/zentao\/framework\/control.class.php","\/opt\/zbox\/app\/zentao\/framework\/base\/control.class.php","\/opt\/zbox\/app\/zentao\/framework\/model.class.php","\/opt\/zbox\/app\/zentao\/framework\/base\/model.class.php","\/opt\/zbox\/app\/zentao\/framework\/helper.class.php","\/opt\/zbox\/app\/zentao\/framework\/base\/helper.class.php","\/opt\/zbox\/app\/zentao\/config\/config.php","\/opt\/zbox\/app\/zentao\/config\/filter.php","\/opt\/zbox\/app\/zentao\/config\/cache.php","\/opt\/zbox\/app\/zentao\/config\/my.php","\/opt\/zbox\/app\/zentao\/config\/zentaopms.php","\/opt\/zbox\/app\/zentao\/config\/actionsmap.php","\/opt\/zbox\/app\/zentao\/config\/routes.php","\/opt\/zbox\/app\/zentao\/config\/ext\/_0_xuanxuan.php","\/opt\/zbox\/app\/zentao\/config\/ext\/_1_maps.php","\/opt\/zbox\/app\/zentao\/config\/ext\/bizext.php","\/opt\/zbox\/app\/zentao\/config\/ext\/crystal.php","\/opt\/zbox\/app\/zentao\/config\/ext\/devops.php","\/opt\/zbox\/app\/zentao\/config\/ext\/effort.php","\/opt\/zbox\/app\/zentao\/config\/ext\/excel.php","\/opt\/zbox\/app\/zentao\/config\/ext\/featurebar.php","\/opt\/zbox\/app\/zentao\/config\/ext\/feedback.php","\/opt\/zbox\/app\/zentao\/config\/ext\/flow.php","\/opt\/zbox\/app\/zentao\/config\/ext\/flowfilter.php","\/opt\/zbox\/app\/zentao\/config\/ext\/gantt.php","\/opt\/zbox\/app\/zentao\/config\/ext\/ipd.php","\/opt\/zbox\/app\/zentao\/config\/ext\/ldapauth.php","\/opt\/zbox\/app\/zentao\/config\/ext\/maps.php","\/opt\/zbox\/app\/zentao\/config\/ext\/oa.php","\/opt\/zbox\/app\/zentao\/config\/ext\/ops.php","\/opt\/zbox\/app\/zentao\/config\/ext\/repo.php","\/opt\/zbox\/app\/zentao\/config\/ext\/sqlbuilder.php","\/opt\/zbox\/app\/zentao\/config\/ext\/ticket.php","\/opt\/zbox\/app\/zentao\/config\/ext\/vm.php","\/opt\/zbox\/app\/zentao\/config\/ext\/web.php","\/opt\/zbox\/app\/zentao\/config\/ext\/xuanxuan.php","\/opt\/zbox\/app\/zentao\/config\/ext\/xuanxuanfilter.php","\/opt\/zbox\/app\/zentao\/config\/ext\/xxb.php","\/opt\/zbox\/app\/zentao\/config\/ext\/zentaobiz.php","\/opt\/zbox\/app\/zentao\/config\/ext\/zentaomax.php","\/opt\/zbox\/app\/zentao\/lib\/front\/front.class.php","\/opt\/zbox\/app\/zentao\/lib\/base\/front\/front.class.php","\/opt\/zbox\/app\/zentao\/lib\/filter\/filter.class.php","\/opt\/zbox\/app\/zentao\/lib\/base\/filter\/filter.class.php","\/opt\/zbox\/app\/zentao\/lib\/form\/form.class.php","\/opt\/zbox\/app\/zentao\/lib\/dbh\/dbh.class.php","\/opt\/zbox\/app\/zentao\/lib\/sqlite\/sqlite.class.php","\/opt\/zbox\/app\/zentao\/lib\/dao\/dao.class.php","\/opt\/zbox\/app\/zentao\/lib\/base\/dao\/dao.class.php","\/opt\/zbox\/app\/zentao\/lib\/mobile\/mobile.class.php","\/opt\/zbox\/app\/zentao\/lib\/dao\/mysql.class.php","\/opt\/zbox\/app\/zentao\/module\/common\/lang\/zh-cn.php","\/opt\/zbox\/app\/zentao\/module\/common\/lang\/common.php","\/opt\/zbox\/app\/zentao\/module\/common\/lang\/menu.php","\/opt\/zbox\/app\/zentao\/extension\/xuan\/common\/ext\/lang\/zh-cn\/xuanxuan.php","\/opt\/zbox\/app\/zentao\/tmp\/model\/open\/rnd\/common.php","\/opt\/zbox\/app\/zentao\/module\/common\/model.php","\/opt\/zbox\/app\/zentao\/module\/common\/tao.php","\/opt\/zbox\/app\/zentao\/module\/company\/lang\/zh-cn.php","\/opt\/zbox\/app\/zentao\/module\/setting\/model.php","\/opt\/zbox\/app\/zentao\/extension\/xuan\/setting\/ext\/lang\/zh-cn\/xuanxuan.php","\/opt\/zbox\/app\/zentao\/module\/company\/model.php","\/opt\/zbox\/app\/zentao\/module\/company\/config.php","\/opt\/zbox\/app\/zentao\/module\/action\/lang\/zh-cn.php","\/opt\/zbox\/app\/zentao\/extension\/xuan\/action\/ext\/lang\/zh-cn\/xuanxuan.php","\/opt\/zbox\/app\/zentao\/module\/user\/lang\/zh-cn.php","\/opt\/zbox\/app\/zentao\/extension\/xuan\/user\/ext\/lang\/zh-cn\/xuanxuan.php","\/opt\/zbox\/app\/zentao\/module\/company\/config\/form.php","\/opt\/zbox\/app\/zentao\/module\/company\/config\/table.php","\/opt\/zbox\/app\/zentao\/module\/custom\/model.php","\/opt\/zbox\/app\/zentao\/module\/custom\/lang\/zh-cn.php","\/opt\/zbox\/app\/zentao\/module\/custom\/config.php","\/opt\/zbox\/app\/zentao\/module\/custom\/config\/dtable.php","\/opt\/zbox\/app\/zentao\/module\/custom\/tao.php","\/opt\/zbox\/app\/zentao\/module\/user\/control.php","\/opt\/zbox\/app\/zentao\/tmp\/model\/open\/rnd\/user.php","\/opt\/zbox\/app\/zentao\/module\/user\/model.php","\/opt\/zbox\/app\/zentao\/module\/user\/config.php","\/opt\/zbox\/app\/zentao\/module\/user\/config\/dtable.php","\/opt\/zbox\/app\/zentao\/module\/user\/config\/form.php","\/opt\/zbox\/app\/zentao\/module\/user\/tao.php","\/opt\/zbox\/app\/zentao\/module\/user\/zen.php","\/opt\/zbox\/app\/zentao\/tmp\/defaultvalue\/biz.php","\/opt\/zbox\/app\/zentao\/tmp\/defaultvalue\/bizext.php","\/opt\/zbox\/app\/zentao\/tmp\/defaultvalue\/ipd.php","\/opt\/zbox\/app\/zentao\/tmp\/defaultvalue\/max.php","\/opt\/zbox\/app\/zentao\/module\/extension\/model.php","\/opt\/zbox\/app\/zentao\/module\/extension\/lang\/zh-cn.php","\/opt\/zbox\/app\/zentao\/module\/extension\/config.php","\/opt\/zbox\/app\/zentao\/lib\/zfile\/zfile.class.php","\/opt\/zbox\/app\/zentao\/tmp\/model\/open\/rnd\/misc.php","\/opt\/zbox\/app\/zentao\/module\/misc\/model.php","\/opt\/zbox\/app\/zentao\/module\/misc\/lang\/zh-cn.php","\/opt\/zbox\/app\/zentao\/extension\/xuan\/misc\/ext\/lang\/zh-cn\/xuanxuan.php","\/opt\/zbox\/app\/zentao\/module\/misc\/config.php","\/opt\/zbox\/app\/zentao\/module\/index\/config.php","\/opt\/zbox\/app\/zentao\/lib\/zin\/zin.class.php","\/opt\/zbox\/app\/zentao\/lib\/zin\/config.php","\/opt\/zbox\/app\/zentao\/lib\/zin\/helper.php","\/opt\/zbox\/app\/zentao\/lib\/zin\/func.php","\/opt\/zbox\/app\/zentao\/lib\/zin\/core\/zin.func.php","\/opt\/zbox\/app\/zentao\/lib\/zin\/utils\/flat.func.php","\/opt\/zbox\/app\/zentao\/lib\/zin\/core\/loader.func.php","\/opt\/zbox\/app\/zentao\/lib\/zin\/core\/node.class.php","\/opt\/zbox\/app\/zentao\/lib\/zin\/core\/helper.func.php","\/opt\/zbox\/app\/zentao\/lib\/zin\/core\/selector.func.php","\/opt\/zbox\/app\/zentao\/lib\/zin\/core\/props.class.php","\/opt\/zbox\/app\/zentao\/lib\/zin\/utils\/dataset.class.php","\/opt\/zbox\/app\/zentao\/lib\/zin\/utils\/classlist.class.php","\/opt\/zbox\/app\/zentao\/lib\/zin\/utils\/styleset.class.php","\/opt\/zbox\/app\/zentao\/lib\/zin\/core\/text.class.php","\/opt\/zbox\/app\/zentao\/lib\/zin\/core\/directive.class.php","\/opt\/zbox\/app\/zentao\/lib\/zin\/core\/zin.class.php","\/opt\/zbox\/app\/zentao\/lib\/zin\/utils\/deep.func.php","\/opt\/zbox\/app\/zentao\/lib\/zin\/core\/context.func.php","\/opt\/zbox\/app\/zentao\/lib\/zin\/core\/context.class.php","\/opt\/zbox\/app\/zentao\/lib\/zin\/core\/render.class.php","\/opt\/zbox\/app\/zentao\/lib\/zin\/core\/command.class.php","\/opt\/zbox\/app\/zentao\/lib\/zin\/core\/js.class.php","\/opt\/zbox\/app\/zentao\/lib\/zin\/utils\/json.func.php","\/opt\/zbox\/app\/zentao\/lib\/zin\/core\/htm.class.php","\/opt\/zbox\/app\/zentao\/lib\/zin\/core\/setting.class.php","\/opt\/zbox\/app\/zentao\/lib\/zin\/core\/set.class.php","\/opt\/zbox\/app\/zentao\/lib\/zin\/core\/wg.class.php","\/opt\/zbox\/app\/zentao\/lib\/zin\/core\/h.class.php","\/opt\/zbox\/app\/zentao\/lib\/zin\/core\/h.func.php","\/opt\/zbox\/app\/zentao\/lib\/zin\/core\/item.class.php","\/opt\/zbox\/app\/zentao\/lib\/zin\/core\/to.class.php","\/opt\/zbox\/app\/zentao\/lib\/zin\/core\/query.class.php","\/opt\/zbox\/app\/zentao\/lib\/zin\/core\/on.class.php","\/opt\/zbox\/app\/zentao\/lib\/zin\/core\/jscallback.class.php","\/opt\/zbox\/app\/zentao\/lib\/zin\/core\/jshelper.class.php","\/opt\/zbox\/app\/zentao\/lib\/zin\/core\/jquery.class.php","\/opt\/zbox\/app\/zentao\/lib\/zin\/core\/jscontext.class.php","\/opt\/zbox\/app\/zentao\/lib\/zin\/core\/style.class.php","\/opt\/zbox\/app\/zentao\/lib\/zin\/core\/render.func.php","\/opt\/zbox\/app\/zentao\/lib\/zin\/zui\/zui.func.php","\/opt\/zbox\/app\/zentao\/lib\/zin\/zui\/zui.class.php","\/opt\/zbox\/app\/zentao\/lib\/zin\/zui\/toggle.class.php","\/opt\/zbox\/app\/zentao\/lib\/zin\/zentao\/zentao.func.php","\/opt\/zbox\/app\/zentao\/lib\/zin\/zentao\/pager.func.php","\/opt\/zbox\/app\/zentao\/lib\/zin\/zentao\/field.func.php","\/opt\/zbox\/app\/zentao\/lib\/zin\/zentao\/field.class.php","\/opt\/zbox\/app\/zentao\/lib\/zin\/zentao\/fieldlist.class.php","\/opt\/zbox\/app\/zentao\/lib\/zin\/zentao\/bind.class.php","\/opt\/zbox\/app\/zentao\/lib\/trace\/trace.class.php"],"sqlQuery":["[MASTER] SET NAMES UTF8","[MASTER] SET profiling = 1","[MASTER] SELECT `value` FROM `zt_config` WHERE `owner`='system' AND `module`='common' AND `section`='global' AND `key`='langs'","[MASTER] SELECT `section`, `key`, `value` FROM`zt_config`WHERE `owner`='system' AND (`module`='custom' or `module`='common') and `key` in ('sprintConcept', 'hourPoint', 'URSR', 'mode', 'URAndSR', 'enableER', 'scoreStatus', 'disabledFeatures', 'closedFeatures')","[MASTER] SELECT `key`, `value` FROM`zt_lang`WHERE `module` = 'custom' and `section` = 'URSRList' and `lang` = 'zh-cn'","[MASTER] SELECT * FROM`zt_lang`WHERE `module`='common' AND `lang`='zh-cn' AND `section`='' AND `vision`='rnd'","[MASTER] SELECT * FROM `zt_lang` WHERE `module`='common' AND `section`='mainNav' AND `lang`='zh-cn' AND `vision`='rnd'","[MASTER] SELECT `value` FROM `zt_config` WHERE `module`  = 'common' AND  `section`  = 'global' AND  `key`  = 'cache' LIMIT 1 ","[MASTER] SELECT `value` FROM `zt_config` WHERE `owner`  = 'system' AND  `key`  = 'version' AND  `module`  = 'common' AND  `section`  = 'global' LIMIT 1 ","[MASTER] SELECT * FROM `zt_config` WHERE 1 = 1  AND  `owner` = 'system' AND  `module` = 'sso' AND  `key` = 'turnon'","[MASTER] SELECT * FROM `zt_company` ORDER BY `id`  LIMIT 1 ","[MASTER] SELECT * FROM `zt_config` WHERE 1 = 1  AND  `owner` = 'system' AND  `module` = 'common' AND  `section` = 'xuanxuan'","[MASTER] SELECT * FROM `zt_config` WHERE `owner` IN ('system','') AND  `vision` IN ('','rnd') ORDER BY `id` ","[MASTER] SELECT * FROM `zt_lang` WHERE `lang` IN ('zh-cn','all') AND  `vision` IN ('rnd','all') ORDER BY `lang`,`id` ","[MASTER] SELECT * FROM `zt_config` WHERE 1 = 1  AND  `owner` = 'system' AND  `module` = 'system' AND  `key` = 'maintenance'","[MASTER] SELECT * FROM `zt_extension` WHERE `status` = 'installed'","[MASTER] select * from zentao.`zt_user` where account = 'admin' and password='e10adc3949ba59abbe56e057f20f883e'"],"profiles":[{"Query_ID":"1","Duration":"0.00007681","Query":"SELECT `value` FROM `zt_config` WHERE `owner`='system' AND `module`='common' AND `section`='global' AND `key`='langs'"},{"Query_ID":"2","Duration":"0.00007147","Query":"SELECT `section`, `key`, `value` FROM`zt_config`WHERE `owner`='system' AND (`module`='custom' or `module`='common') and `key` in ('sprintConcept', 'hourPoint', 'URSR', 'mode', 'URAndSR', 'enableER', 'scoreStatus', 'disabledFeatures', 'closedFeatures')"},{"Query_ID":"3","Duration":"0.00006391","Query":"SELECT `key`, `value` FROM`zt_lang`WHERE `module` = 'custom' and `section` = 'URSRList' and `lang` = 'zh-cn'"},{"Query_ID":"4","Duration":"0.00006892","Query":"SELECT * FROM`zt_lang`WHERE `module`='common' AND `lang`='zh-cn' AND `section`='' AND `vision`='rnd'"},{"Query_ID":"5","Duration":"0.00017062","Query":"SELECT * FROM `zt_lang` WHERE `module`='common' AND `section`='mainNav' AND `lang`='zh-cn' AND `vision`='rnd'"},{"Query_ID":"6","Duration":"0.00006641","Query":"SELECT `value` FROM `zt_config` wHeRe `module`  = 'common' AND  `section`  = 'global' AND  `key`  = 'cache' lImiT 1"},{"Query_ID":"7","Duration":"0.00006311","Query":"SELECT `value` FROM `zt_config` wHeRe `owner`  = 'system' AND  `key`  = 'version' AND  `module`  = 'common' AND  `section`  = 'global' lImiT 1"},{"Query_ID":"8","Duration":"0.00006856","Query":"SELECT * FROM `zt_config` wHeRe 1 = 1  AND  `owner` = 'system' AND  `module` = 'sso' AND  `key` = 'turnon'"},{"Query_ID":"9","Duration":"0.00007263","Query":"SELECT * FROM `zt_company` oRdEr bY `id`  lImiT 1"},{"Query_ID":"10","Duration":"0.00006484","Query":"SELECT * FROM `zt_config` wHeRe 1 = 1  AND  `owner` = 'system' AND  `module` = 'common' AND  `section` = 'xuanxuan'"},{"Query_ID":"11","Duration":"0.00009525","Query":"SELECT * FROM `zt_config` wHeRe `owner` IN ('system','') AND  `vision` IN ('','rnd') oRdEr bY `id`"},{"Query_ID":"12","Duration":"0.00007614","Query":"SELECT * FROM `zt_lang` WHERE `lang` IN ('zh-cn','all') AND  `vision` IN ('rnd','all') ORDER BY `lang`,`id`"},{"Query_ID":"13","Duration":"0.00007659","Query":"SELECT * FROM `zt_config` wHeRe 1 = 1  AND  `owner` = 'system' AND  `module` = 'system' AND  `key` = 'maintenance'"},{"Query_ID":"14","Duration":"0.00007102","Query":"SELECT * FROM `zt_extension` wHeRe `status` = 'installed'"},{"Query_ID":"15","Duration":"0.00006698","Query":"select * from zentao.`zt_user` where account = 'admin' and password='e10adc3949ba59abbe56e057f20f883e'"}]},"basePath":"\/opt\/zbox\/app\/zentao\/","debug":[],"errors":[]};
+let password1Encrypted = false;
+let password2Encrypted = false;
+let verifyEncrypted    = false;
+
+/**
+ * 密码改变时标记密码未加密。
+ * Mark password unencrypted when password changes.
+ *
+ * @param  event  event
+ * @access public
+ * @return void
+ */
+function changePassword(event)
+{
+    const targetID = $(event.target).attr('id');
+    if(targetID == 'password1')      password1Encrypted = false;
+    if(targetID == 'password2')      password2Encrypted = false;
+    if(targetID == 'verifyPassword') verifyEncrypted    = false;
+}
+
+/**
+ * 加密密码并记录密码强度和长度。
+ * Encrypt password and record password strength and length.
+ *
+ * @access public
+ * @return void
+ */
+function encryptPassword()
+{
+    $('#verifyPassword').on('change', function(){verifyEncrypted = false});
+
+    const rand = $('input[name=verifyRand]').val();
+
+    /* 加密当前登录用户的密码。*/
+    /* Encrypt password of current user. */
+    if($('input#verifyPassword').length > 0)
+    {
+        const password = $('input#verifyPassword').val().trim();
+        if(password && !verifyEncrypted)
+        {
+            $('input#verifyPassword').val(md5(md5(password) + rand));
+            verifyEncrypted = true;
+        }
+    }
+
+    if($('#password1').length == 0 || $('#password2').length == 0) return;
+
+    /* 加密新添加用户或被修改用户的密码 1，并记录密码强度和长度。*/
+    /* Encrypt password 1 of new or modified user, and record password strength and length. */
+    const password1 = $('#password1').val().trim();
+    if(password1 && !password1Encrypted)
+    {
+        $('#password1').val(md5(password1) + rand);
+        $("input[name=passwordStrength]").val(computePasswordStrength(password1));
+        $("input[name=passwordLength]").val(password1.length);
+        password1Encrypted = true;
+    }
+
+    /* 加密新添加用户或被修改用户的密码 2。*/
+    /* Encrypt password 2 of new or modified user. */
+    const password2 = $('#password2').val().trim();
+    if(password2 && !password2Encrypted)
+    {
+        $('#password2').val(md5(password2) + rand);
+        password2Encrypted = true;
+    }
+}
+
+/**
+ * 添加或编辑一个用户时切换显示选择所属公司或添加公司的输入框。
+ * Toggle display company picker or input when add or edit a user.
+ *
+ * @param  event  event
+ * @access public
+ * @return void
+ */
+function toggleNew(event)
+{
+    const checked = $(event.target).prop('checked');
+    $('[name="company"]').closest('.picker-box').toggleClass('hidden', checked);
+    $('#newCompany').toggleClass('hidden', !checked);
+}
+
+/**
+ * 更改界面类型时更新权限组。
+ * Update group when change vision.
+ *
+ * @param  event  event
+ * @access public
+ * @return void
+ */
+function changeVision(event)
+{
+    let visions = [];
+    $('input[name="visions[]"]:checked').each(function()
+    {
+        visions.push($(this).val());
+    });
+
+    const link = $.createLink('user', 'ajaxGetGroups', 'visions=' + visions);
+    $.get(link, function(response)
+    {
+        const data   = JSON.parse(response);
+        const group  = $('[name^="group"]').val();
+        const $group = $('[name^="group"]').zui('picker');
+        $group.render({items: data});
+        $group.$.setValue(group);
+    });
+}
+
+/**
+ * 计算密码强度。
+ *
+ * @param  string password
+ * @access public
+ * @return int
+ */
+function computePasswordStrength(password)
+{
+    if(password.length == 0) return 0;
+
+    var strength = 0;
+    var length   = password.length;
+
+    var complexity  = new Array();
+    for(i = 0; i < length; i++)
+    {
+        letter = password.charAt(i);
+        var asc = letter.charCodeAt();
+        if(asc >= 48 && asc <= 57)
+        {
+            complexity[0] = 1;
+        }
+        else if((asc >= 65 && asc <= 90))
+        {
+            complexity[1] = 2;
+        }
+        else if(asc >= 97 && asc <= 122)
+        {
+            complexity[2] = 4;
+        }
+        else
+        {
+            complexity[3] = 8;
+        }
+    }
+
+    var sumComplexity = 0;
+    for(i in complexity) sumComplexity += complexity[i];
+
+    if((sumComplexity == 7 || sumComplexity == 15) && password.length >= 6) strength = 1;
+    if(sumComplexity == 15 && password.length >= 10) strength = 2;
+
+    return strength;
+}
+
+window.switchAccount = function(account)
+{
+    link = $.createLink('user', method, 'account=' + account);
+    if(method == 'dynamic') link = $.createLink('user', method, 'account=' + account + '&period=' + pageParams.period);
+    if(method == 'todo')    link = $.createLink('user', method, 'account=' + account + '&type=' + pageParams.type);
+    if(method == 'story')   link = $.createLink('user', method, 'account=' + account + '&storyType=' + pageParams.storyType);
+
+    loadPage(link);
+};
+
+window.beforePageLoad = function(options)
+{
+    if(options.load === 'table') options.selector += ',.dtable-sub-nav';
+}
+window.adjustPanelPos = function()
+{
+    let $login = $('#login');
+    let bestTop = Math.max(0, Math.floor($(window).height() - $login.outerHeight())/2);
+    $login.css('margin-top', bestTop);
+};
+
+window.refreshCaptcha = function(obj)
+{
+    let $this = $(obj)
+    let captchaLink = $.createLink('misc', 'captcha');
+    captchaLink += captchaLink.indexOf('?') < 0 ? '?' : '&';
+    captchaLink += 's=' + Math.random();
+
+    $this.attr('src', captchaLink);
+};
+
+/**
+ * Show notice for one click package use weak password.
+ *
+ * @access public
+ * @return void
+ */
+window.showNotice = function()
+{
+    if(typeof(process4Safe) == 'string') zui.Modal.alert(process4Safe);
+};
+
+window.switchLang = function(lang)
+{
+    selectLang(lang);
+};
+
+adjustPanelPos();
+$(window).on('resize', adjustPanelPos);
+
+timeoutID = null;
+window.safeSubmit = function(e)
+{
+    e.preventDefault();
+    e.stopPropagation();
+
+    let account          = $('#account').val().trim();
+    let password         = $('input#password[type="password"]').val().trim();
+    let passwordStrength = computePasswordStrength(password);
+
+    let hasMD5    = typeof(md5) == 'function';
+    let referer   = $('[name=referer]').val();
+    let link      = $.createLink('user', 'login');
+    let keepLogin = $('#keepLoginon').prop('checked') ? 1 : 0;
+    let captcha   = $('#captcha').length == 1 ? $('#captcha').val() : '';
+    let timeout   = true;
+
+    clearTimeout(timeoutID);
+    timeoutID = setTimeout(function()
+    {
+        if(timeout) zui.Modal.alert(loginTimeoutTip);
+    }, 4000);
+
+    $('#submit').attr('disabled', 'disabled');
+    $.get($.createLink('user', 'refreshRandom'), function(rand)
+    {
+        if(password != '') password = hasMD5 ? md5(md5(password) + rand) : password,
+        timeout  = false;
+
+        $.post(link,
+        {
+            "account"          : account,
+            "password"         : password,
+            'passwordStrength' : passwordStrength,
+            'referer'          : referer,
+            'verifyRand'       : rand,
+            'keepLogin'        : keepLogin,
+            'captcha'          : captcha
+        },
+        function(data)
+        {
+            data = JSON.parse(data);
+            if(data.result == 'fail')
+            {
+                zui.Modal.alert(data.message);
+                if($('.captchaBox').length == 1) refreshCaptcha($('.captchaBox .input-group .input-group-addon img'));
+                clearTimeout(timeoutID);
+                $('#submit').removeAttr('disabled').trigger('blur');
+                waitDom('.modal.show .btn.primary', function()
+                {
+                    let $this = $(this);
+                    setTimeout(function(){$this.trigger('focus')}, 200);
+                })
+                return false;
+            }
+
+            location.href = data.locate;
+        });
+    });
+
+    return false;
+};
+
+window.demoSubmit = function($el)
+{
+    let account          = $($el).attr('data-account');
+    let password         = $($el).attr('data-password');
+    let link             = $.createLink('user', 'login');
+    let timeout          = true;
+    let passwordStrength = computePasswordStrength(password);
+
+    clearTimeout(timeoutID);
+    timeoutID = setTimeout(function()
+    {
+        if(timeout) zui.Modal.alert(loginTimeoutTip);
+    }, 4000);
+    $.post(link,
+    {
+        "account"          : account,
+        "password"         : password,
+        'passwordStrength' : passwordStrength,
+    },
+    function(data)
+    {
+        data = JSON.parse(data);
+        if(data.result == 'fail')
+        {
+            zui.Modal.alert(data.message);
+            return false;
+        }
+
+        location.href = data.locate;
+    });
+}
+
+document.getElementById("account").focus();
+}());</script></body></html>
